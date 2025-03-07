@@ -7,3 +7,5 @@ Colors by Badges;
 #20fc04 Verifieds
 #ffac04 VIPs
 #00fff2 OGs
+
+![image](https://github.com/user-attachments/assets/8a5688e0-3a94-40a6-8faa-a687518dc900)
