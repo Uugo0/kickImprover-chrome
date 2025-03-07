@@ -8,4 +8,4 @@ Colors by Badges;
 #ffac04 VIPs
 #00fff2 OGs
 
-![image](https://github.com/user-attachments/assets/00a76956-c4c5-4cb8-aba3-0b8d8e452065)
+![image](https://github.com/user-attachments/assets/71585441-4337-4f9e-9811-18c9c6b89002)
