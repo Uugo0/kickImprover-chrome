@@ -2,20 +2,22 @@ body {
     width: 300px;
     height: 400px;
     font-family: Arial, sans-serif;
-    background-color: darkgrey;
+    color: #58fc1c;
+    background-color: #181414;
     text-align: center;
 }
 
 button {
-    width: 80%;
+    width: 60%;
     height: 10%;
+    margin: 8px;
     border: none;
-    background-color: #007bff;
+    background-color: #383434;
     color: white;
     cursor: pointer;
     border-radius: 0.5rem;
 }
 
 button:hover {
-    background-color: #0056b3;
+    background-color: #585454;
 }

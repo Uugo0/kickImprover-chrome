@@ -11,7 +11,7 @@ document.onreadystatechange = function () {
 };
 
 let lastUrl = location.href;
-
+ 
 // Listen for browser navigation events (Back/Forward/History API changes)
 window.addEventListener("popstate", () => {
     if (location.href !== lastUrl) {
@@ -34,22 +34,17 @@ function extensionStarter() {
     if (document.readyState === "complete") {
         const channelChatroom = document.getElementById("channel-chatroom");
         if (channelChatroom) {
-            if (document.readyState === "complete") {
-                const channelChatroom = document.getElementById("channel-chatroom");
-                if (channelChatroom) {
-                    const messageHolder = channelChatroom.querySelector(".no-scrollbar.relative");
-                    if (messageHolder) {
-                        const messageObserver = new MutationObserver((messagesList)=>{
-                            messagesList.forEach((message)=>{
-                                if(message.type === "childList"){
-                                    messageChecker(message);
-                                }
-                            })
-                        })
+            const messageHolder = channelChatroom.querySelector(".no-scrollbar.relative");
+            if (messageHolder) {
+                const messageObserver = new MutationObserver((messagesList)=>{
+                    messagesList.forEach((message)=>{
+                        if(message.type === "childList"){
+                            messageChecker(message);
+                        }
+                    })
+                })
 
-                        messageObserver.observe(messageHolder,config);
-                    }
-                }
+                messageObserver.observe(messageHolder,config);
             }
         }
     }
@@ -62,52 +57,51 @@ function messageChecker(message)
         if(!lastMessage.classList.contains("message-checked")){
             lastMessage.classList.add('message-checked');
             let messageGroup = lastMessage.querySelector(".break-words");
-            messageGroupChecker(messageGroup);
+            if(messageGroup)
+                messageGroupChecker(messageGroup);
         }
     }
 }
 
 function messageGroupChecker(messageGroup){
-    if(messageGroup){
-        let senderGroup = messageGroup.querySelector(".flex-nowrap");
-        if(senderGroup){
+    let senderGroup = messageGroup.querySelector(".flex-nowrap");
+    if(senderGroup){
 
-            let senderNick = senderGroup.querySelector(".inline.font-bold").getAttribute("title");
+        let senderNick = senderGroup.querySelector(".inline.font-bold").getAttribute("title");
 
-            senderNickChecker(senderNick,(nickFound)=>{
-                if(nickFound){
-                    messageGroup.style.border = "1px solid #ff2d2d";
-                }
-                else{
-                    let senderSVG = senderGroup.querySelector("svg");
-                    if(senderSVG){
-                        let pathList = senderSVG.querySelectorAll("path");
-                        pathList.forEach((senderPATH)=>{
-                            if(senderPATH){
-                                switch(senderPATH.getAttribute('fill')){
-                                    case 'url(#HostBadgeA)':
-                                        messageGroup.style.border = "1px solid #b30dfe";
-                                        break;
-                                    case '#00C7FF':
-                                        messageGroup.style.border = "1px solid #0038cd";
-                                        break;
-                                    case '#1EFF00':
-                                        messageGroup.style.border = "1px solid #20fc04";
-                                        break;
-                                    case 'url(#VIPBadgeA)':
-                                        messageGroup.style.border = "1px solid #ffac04";
-                                        break;
-                                    case 'url(#OGBadgeB)':
-                                        messageGroup.style.border = "1px solid #00fff2";
-                                        break;
-                                }
+        senderNickChecker(senderNick,(nickFound)=>{
+            if(nickFound){
+                messageGroup.style.border = "1px solid #ff2d2d";
+            }
+            else{
+                let senderSVG = senderGroup.querySelector("svg");
+                if(senderSVG){
+                    let pathList = senderSVG.querySelectorAll("path");
+                    pathList.forEach((senderPATH)=>{
+                        if(senderPATH){
+                            switch(senderPATH.getAttribute('fill')){
+                                case 'url(#HostBadgeA)':
+                                    messageGroup.style.border = "1px solid #ce58fd";
+                                    break;
+                                case '#00C7FF':
+                                    messageGroup.style.border = "1px solid #54d6fd";
+                                    break;
+                                case '#1EFF00':
+                                    messageGroup.style.border = "1px solid #20fc04";
+                                    break;
+                                case 'url(#VIPBadgeA)':
+                                    messageGroup.style.border = "1px solid #ffb404";
+                                    break;
+                                case 'url(#OGBadgeB)':
+                                    messageGroup.style.border = "1px solid #02b5af";
+                                    break;
                             }
-                        })
-                    }
+                        }
+                    })
                 }
-            });
-        }       
-    }
+            }
+        });
+    }       
 }
 
 
