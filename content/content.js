@@ -79,7 +79,31 @@ function messageGroupChecker(messageGroup){
                     messageGroup.style.border = "1px solid #ff2d2d";
                 }
                 else{
-                    badgeChecker(messageGroup);
+                    let senderSVG = senderGroup.querySelector("svg");
+                    if(senderSVG){
+                        let pathList = senderSVG.querySelectorAll("path");
+                        pathList.forEach((senderPATH)=>{
+                            if(senderPATH){
+                                switch(senderPATH.getAttribute('fill')){
+                                    case 'url(#HostBadgeA)':
+                                        messageGroup.style.border = "1px solid #b30dfe";
+                                        break;
+                                    case '#00C7FF':
+                                        messageGroup.style.border = "1px solid #0038cd";
+                                        break;
+                                    case '#1EFF00':
+                                        messageGroup.style.border = "1px solid #20fc04";
+                                        break;
+                                    case 'url(#VIPBadgeA)':
+                                        messageGroup.style.border = "1px solid #ffac04";
+                                        break;
+                                    case 'url(#OGBadgeB)':
+                                        messageGroup.style.border = "1px solid #00fff2";
+                                        break;
+                                }
+                            }
+                        })
+                    }
                 }
             });
         }       
@@ -94,34 +118,6 @@ function senderNickChecker(senderNick,callback){
         callback(data.nicknames.includes(senderNick));
     });
     return check;
-}
-
-function badgeChecker(messageGroup){
-    let senderSVG = senderGroup.querySelector("svg");
-    if(senderSVG){
-        let pathList = senderSVG.querySelectorAll("path");
-        pathList.forEach((senderPATH)=>{
-            if(senderPATH){
-                switch(senderPATH.getAttribute('fill')){
-                    case 'url(#HostBadgeA)':
-                        messageGroup.style.border = "1px solid #b30dfe";
-                        break;
-                    case '#00C7FF':
-                        messageGroup.style.border = "1px solid #0038cd";
-                        break;
-                    case '#1EFF00':
-                        messageGroup.style.border = "1px solid #20fc04";
-                        break;
-                    case 'url(#VIPBadgeA)':
-                        messageGroup.style.border = "1px solid #ffac04";
-                        break;
-                    case 'url(#OGBadgeB)':
-                        messageGroup.style.border = "1px solid #00fff2";
-                        break;
-                }
-            }
-        })
-    }
 }
 
 const config = {
