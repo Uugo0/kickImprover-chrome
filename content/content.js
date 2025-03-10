@@ -1,13 +1,14 @@
 // Check page loading state, logging accordingly
 document.onreadystatechange = function () {
-    if (document.readyState === "loading" || document.readyState === "interactive") {
-        console.log("Website loading...");
-    } else if (document.readyState === "complete") {
+    if (document.readyState === "complete"){
         console.log("Website ready!");
         extensionStarter();
-    } else {
-        console.log("State change is stuck!");
     }
+    else if (document.readyState === "loading" ||
+             document.readyState === "interactive")
+        console.log("Website loading...");
+    else
+        console.log("State change is stuck!");
 };
 
 let lastUrl = location.href;
@@ -28,9 +29,10 @@ setInterval(() => {
         lastUrl = location.href;
         extensionStarter();
     }
-}, 120000); // Checks from parameter
+}, 60000); // Checks from parameter
 
-function extensionStarter() {
+function extensionStarter()
+{
     if (document.readyState === "complete") {
         const channelChatroom = document.getElementById("channel-chatroom");
         if (channelChatroom) {
@@ -63,12 +65,11 @@ function messageChecker(message)
     }
 }
 
-function messageGroupChecker(messageGroup){
+function messageGroupChecker(messageGroup)
+{
     let senderGroup = messageGroup.querySelector(".flex-nowrap");
     if(senderGroup){
-
         let senderNick = senderGroup.querySelector(".inline.font-bold").getAttribute("title");
-
         senderNickChecker(senderNick,(nickFound)=>{
             if(nickFound){
                 messageGroup.style.border = "1px solid #ff2d2d";
@@ -106,7 +107,8 @@ function messageGroupChecker(messageGroup){
 
 
 
-function senderNickChecker(senderNick,callback){
+function senderNickChecker(senderNick,callback)
+{
     let check = false;
     chrome.storage.local.get({nicknames:[]},(data)=>{
         callback(data.nicknames.includes(senderNick));
