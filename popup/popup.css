@@ -2,22 +2,61 @@ body {
     width: 300px;
     height: 400px;
     font-family: Arial, sans-serif;
-    color: #58fc1c;
-    background-color: #181414;
+    background-color: #171717;
     text-align: center;
+    color: #F0F0F0;
+}
+
+h2 {
+    text-align: left;
+    padding-top: .5rem;
+    margin-left: .6875rem;
+    margin-bottom: .5rem;
+}
+
+input, button {
+    text-align: left;
+    display: inline-block;
+    align-items: center; /* Dikey hizalama */
+}
+
+input {
+    width: 70%;
+    height: 10%;
+    float: left;
+    margin-left: .6875rem;
+    padding: .5rem;
+    border: none;
+    border-radius: .3rem;
 }
 
 button {
-    width: 60%;
+    width: 15%;
     height: 10%;
-    margin: 8px;
+    padding: .5rem;
+    text-align: center;
     border: none;
-    background-color: #383434;
-    color: white;
+    background-color: #F0F0F0;
+    color: #171717;
     cursor: pointer;
-    border-radius: 0.5rem;
+    border-radius: .3rem;
 }
 
 button:hover {
-    background-color: #585454;
+    background-color: #FFFFFF;
+    color: #222222;
+}
+
+li {
+    text-align: left;
+    padding-left: .5rem;
+    list-style-type: inherit;
+    margin: inherit;
+    
+    button {
+        width: 12.3015873%;
+        padding: .5rem;
+        margin-left: .5rem;
+    }
+    
 }
