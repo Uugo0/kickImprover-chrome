@@ -109,11 +109,10 @@ function messageGroupChecker(messageGroup)
 
 function senderNickChecker(senderNick,callback)
 {
-    let check = false;
     chrome.storage.local.get({nicknames:[]},(data)=>{
         callback(data.nicknames.includes(senderNick));
     });
-    return check;
+    return false;
 }
 
 const config = {
