@@ -75,11 +75,14 @@ function messageGroupChecker(messageGroup)
                 messageGroup.style.border = "1px solid #ff2d2d";
             }
             else{
-                let senderSVG = senderGroup.querySelector("svg");
-                if(senderSVG){
-                    let pathList = senderSVG.querySelectorAll("path");
-                    pathList.forEach((senderPATH)=>{
+                let senderSVGChecked = false;
+                let senderSVGList = senderGroup.querySelectorAll("svg");
+                senderSVGList.forEach((senderSVG)=>{
+                    if(senderSVG && !senderSVGChecked){
+                        console.log("Current SVG:",senderSVG);
+                        let senderPATH = senderSVG.querySelector("path");
                         if(senderPATH){
+                            console.log("Current PATH:",senderPATH);
                             switch(senderPATH.getAttribute('fill')){
                                 case 'url(#HostBadgeA)':
                                     messageGroup.style.border = "1px solid #ce58fd";
@@ -97,9 +100,10 @@ function messageGroupChecker(messageGroup)
                                     messageGroup.style.border = "1px solid #02b5af";
                                     break;
                             }
+                            senderSVGChecked = true;
                         }
-                    })
-                }
+                    }
+                });
             }
         });
     }       
