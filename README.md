@@ -6,4 +6,4 @@ It can add borders by badges and wanted nicknames.
 ![image](https://github.com/user-attachments/assets/f96e8264-8d5d-4c8d-a714-e656585a09ca)
 ![image](https://github.com/user-attachments/assets/459bb2f2-5990-4b5d-930c-ff45fbbfb109)
 ![image](https://github.com/user-attachments/assets/e7e2995d-40cf-48b2-989f-1f67cd9a96b7)
-![image](https://github.com/user-attachments/assets/20af2104-1e43-4540-9d2e-cb9c02e937e6)
+![image](https://github.com/user-attachments/assets/25c6aa98-6ff0-4f65-8890-53cdf8d4641b)
