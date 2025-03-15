@@ -1,119 +1,132 @@
-// Check page loading state, logging accordingly
+// Checking page loading state
 document.onreadystatechange = function () {
-    if (document.readyState === "complete"){
-        console.log("Website ready!");
-        extensionStarter();
-    }
-    else if (document.readyState === "loading" ||
-             document.readyState === "interactive")
+    if (document.readyState === "complete")
+        startExtension();
+    else if (document.readyState === "loading" || 
+                document.readyState === "interactive")
         console.log("Website loading...");
     else
         console.log("State change is stuck!");
 };
 
+// Listen for browser navigation events
 let lastUrl = location.href;
- 
-// Listen for browser navigation events (Back/Forward/History API changes)
-window.addEventListener("popstate", () => {
-    if (location.href !== lastUrl) {
+window.addEventListener("popstate",()=>{
+    if (location.href !== lastUrl){
         console.log("URL changed via popstate!");
         lastUrl = location.href;
-        extensionStarter();
+        startExtension();
     }
 });
 
-// Detect manual URL changes (some sites use pushState without triggering popstate)
-setInterval(() => {
-    if (location.href !== lastUrl) {
+// Detect manual URL changes
+setInterval(()=>{
+    if (location.href !== lastUrl){
         console.log("URL changed via script!");
         lastUrl = location.href;
-        extensionStarter();
+        startExtension();
     }
-}, 60000); // Checks from parameter
+},300000);
 
-function extensionStarter()
+// Get locally stored data
+function getAllData(callback)
 {
+    browser.storage.local.get({nicknames:[]},
+        (data)=>{callback(data);});
+}
 
-    getAllData((data) => {
-        if (document.readyState === "complete") {
-            const channelChatroom = document.getElementById("channel-chatroom");
-            if (channelChatroom) {
-                const messageHolder = channelChatroom.querySelector(".no-scrollbar.relative");
-                if (messageHolder) {
-                    const messageObserver = new MutationObserver((messagesList)=>{
-                        messagesList.forEach((message)=>{
-                            if(message.type === "childList"){
-                                messageChecker(message,data);
-                            }
-                        })
-                    })
-    
-                    messageObserver.observe(messageHolder,config);
+// Start extonsion for DOM
+function startExtension()
+{
+    console.log("kickImprover started working!");
+    getAllData((data)=>{
+        const messageObserver = new MutationObserver((messagesList)=>{
+            messagesList.forEach((message)=>{
+                if(message)
+                    checkNewMessage(message,data);
+            })
+        })
+
+        // Find Chatroom and observe it
+        const channelChatroom = document.getElementById("channel-chatroom");
+        if(channelChatroom){
+            const messageHolder = channelChatroom.querySelector(".no-scrollbar");
+            if(messageHolder)
+                messageObserver.observe(messageHolder,config);
+        }
+    });
+}
+
+// Get inner group of lastly added message
+function checkNewMessage(message,data)
+{
+    let lastMessage = message.addedNodes[message.addedNodes.length-1];
+    if(lastMessage){
+        if(!lastMessage.classList.contains("message-checked")){
+            // console.log("Checking lastMessage!");
+            lastMessage.classList.add('message-checked');
+            let innerGroup = lastMessage.querySelector(".break-words");
+            if(innerGroup)
+                checkInnerGroup(innerGroup,data);
+        }
+    }   
+}
+
+// Check inner group
+function checkInnerGroup(innerGroup,data)
+{
+    let senderGroup = innerGroup.querySelector(".flex-nowrap");
+    if(senderGroup){
+        let senderNick = senderGroup.querySelector(".inline").getAttribute("title");
+        // Check if sender nick is included in nickname data
+        if(data.nicknames.includes(senderNick))
+            addBorderToGroup(innerGroup,"#ff2d2d");
+        else
+            checkSenderBadges(senderGroup,innerGroup);
+    }
+}
+
+function checkSenderBadges(senderGroup,innerGroup)
+{
+    // console.log("Checking senderBadges!");
+    let senderSVGChecked = false;
+    let senderSVGList = senderGroup.querySelectorAll("svg");
+    senderSVGList.forEach((senderSVG)=>{
+        if(senderSVG && !senderSVGChecked){
+            let senderPATH = senderSVG.querySelector("path");
+            if(senderPATH){
+                // Add border to message by sender badge
+                switch(senderPATH.getAttribute('fill'))
+                {
+                    case 'url(#HostBadgeA)':
+                        addBorderToGroup(innerGroup,"#ce58fd");
+                        break;
+                    case '#00C7FF':
+                        addBorderToGroup(innerGroup,"#54d6fd");
+                        break;
+                    case '#1EFF00':
+                        addBorderToGroup(innerGroup,"#20fc04");
+                        break;
+                    case 'url(#VIPBadgeA)':
+                        addBorderToGroup(innerGroup,"#ffb404");
+                        break;
+                    case 'url(#OGBadgeB)':
+                        addBorderToGroup(innerGroup,"#02b5af");
+                        break;
+                    case 'url(#FounderBadgeB)':
+                        addBorderToGroup(innerGroup,"#d89404");
+                        break;
                 }
+                senderSVGChecked = true;
             }
         }
     });
 }
 
-function messageChecker(message,data)
-{
-    let lastMessage= message.addedNodes[message.addedNodes.length-1];
-    if(lastMessage){
-        if(!lastMessage.classList.contains("message-checked")){
-            lastMessage.classList.add('message-checked');
-            let messageGroup = lastMessage.querySelector(".break-words");
-            if(messageGroup)
-                messageGroupChecker(messageGroup,data);
-        }
-    }
-}
 
-function messageGroupChecker(messageGroup,data)
+function addBorderToGroup(innerGroup,color)
 {
-    let senderGroup = messageGroup.querySelector(".flex-nowrap");
-    if(senderGroup){
-        let senderNick = senderGroup.querySelector(".inline.font-bold").getAttribute("title");
-        if(data.nicknames.includes(senderNick)){
-            messageGroup.style.border = "1px solid #ff2d2d";
-        }
-        else{
-            let senderSVGChecked = false;
-            let senderSVGList = senderGroup.querySelectorAll("svg");
-            senderSVGList.forEach((senderSVG)=>{
-                if(senderSVG && !senderSVGChecked){
-                    let senderPATH = senderSVG.querySelector("path");
-                    if(senderPATH){
-                        switch(senderPATH.getAttribute('fill'))
-                        {
-                            case 'url(#HostBadgeA)':
-                                messageGroup.style.border = "1px solid #ce58fd";
-                                break;
-                            case '#00C7FF':
-                                messageGroup.style.border = "1px solid #54d6fd";
-                                break;
-                            case '#1EFF00':
-                                messageGroup.style.border = "1px solid #20fc04";
-                                break;
-                            case 'url(#VIPBadgeA)':
-                                messageGroup.style.border = "1px solid #ffb404";
-                                break;
-                            case 'url(#OGBadgeB)':
-                                messageGroup.style.border = "1px solid #02b5af";
-                                break;
-                        }
-                        senderSVGChecked = true;
-                    }
-                }
-            });
-        }
-    }       
-}
-
-function getAllData(callback)
-{
-    chrome.storage.local.get({nicknames:[]},(data)=>{
-        callback(data);
-    });
+    innerGroup.style.border = "1px solid "+color;
 }
 
 const config = {
