@@ -31,7 +31,7 @@ setInterval(()=>{
 // Get locally stored data
 function getAllData(callback)
 {
-    browser.storage.local.get({nicknames:[]},
+    chrome.storage.local.get({nicknames:[]},
         (data)=>{callback(data);});
 }
 
