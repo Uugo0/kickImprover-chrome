@@ -1,0 +1,2 @@
+- name: Sync your forks
+  uses: sudo-bot/action-fork-sync@v1.0.4
