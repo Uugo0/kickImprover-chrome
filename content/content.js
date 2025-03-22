@@ -9,14 +9,24 @@ document.onreadystatechange = function () {
         console.log("State change is stuck!");
 };
 
-// Listen for browser navigation events
 let lastUrl = location.href;
-window.addEventListener("popstate",()=>{
+function handleURLChange(){
     if (location.href !== lastUrl){
-        console.log("URL changed via popstate!");
+        console.log("URL changed!");
         lastUrl = location.href;
         startExtension();
     }
+}
+
+// Listen for browser navigation events
+window.addEventListener("popstate", () => {
+    console.log("popstate event fired");
+    handleURLChange();
+});
+  
+window.addEventListener("pushstate", () => {
+    console.log("pushstate event fired");
+    handleURLChange();
 });
 
 // Detect manual URL changes
@@ -78,9 +88,11 @@ function checkInnerGroup(innerGroup,data)
     let senderGroup = innerGroup.querySelector(".flex-nowrap");
     if(senderGroup){
         let senderNick = senderGroup.querySelector(".inline").getAttribute("title");
-        // Check if sender nick is included in nickname data
-        if(data.nicknames.includes(senderNick))
-            addBorderToGroup(innerGroup,"#ff2d2d");
+        if(data.nicknames.length > 0){
+            // Check if sender nick is included in nickname data
+            if(data.nicknames.includes(senderNick))
+                addBorderToGroup(innerGroup,"#ff2d2d");
+        }
         else
             checkSenderBadges(senderGroup,innerGroup);
     }
